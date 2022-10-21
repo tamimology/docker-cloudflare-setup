@@ -28,7 +28,7 @@ After that, the main dashboard will open, allowing you to add a new site, which 
 
 #### **NOTE:** *Never use the DuckDNS service with Cloudflare as it is not supported*
 
-![add site](/screenshots/cloudflare/add_site.png)
+![add site](/cloudflare/add_site.png)
 
 After that, it should open your website dashboard by default, if not, simply click on it under the Home view.
 
@@ -36,7 +36,7 @@ At the very bottom right side, where it says ***API***, take note of the **Zone 
 
 Now on the right side, click **DNS Settings**.
 
-![dns settings](/screenshots/cloudflare/dns_settings.png)
+![dns settings](/cloudflare/dns_settings.png)
 
 In there, click on **Add record** and fill in as following:
   1. **A**
@@ -45,12 +45,12 @@ In there, click on **Add record** and fill in as following:
   
   Leave the rest untouched and click on **Save**
   
-![dns manager](/screenshots/cloudflare/dns_manager.png)
+![dns manager](/cloudflare/dns_manager.png)
 
 
 Now scroll down till you see the part where it says **Cloudflare Nameservers** and take note of the 2 URLs there for later use.
 
-![ns](/screenshots/cloudflare/ns.png)
+![ns](/cloudflare/ns.png)
 
 
 ## Creating a DNS
@@ -63,7 +63,7 @@ Once you enter to the website, you need to check the availability of the desired
 
 Ath the time I prepared this guide, there was a bug on their server in which you cannot just click on any of the options available, so to register, simply click on **Services** then choose **Register a New Domain**. Follow the steps in there, and make sure you choose the **12 months** plan as it is the longest period offered as free.
 
-![free dns](/screenshots/cloudflare/free_dns.png)
+![free dns](/cloudflare/free_dns.png)
 
 ## Changing Nameservers
 
@@ -73,7 +73,7 @@ Now after you signed up, go to **Services** then choose **My Domains** from the 
 
 In the next window, click on **Management Tools** then choose **Nameservers** and add the *nameservers* you took note of from the previous step
 
-![changing_ns](/screenshots/cloudflare/changing_ns.png)
+![changing_ns](/cloudflare/changing_ns.png)
 
 
 ## Adding Tunnels
@@ -88,7 +88,7 @@ Now the Tunnel is created, and a new page opens showing the **Install connector*
 
 Click on **Next**
 
-![tunnel docker](/screenshots/cloudflare/tunnel_docker.png)
+![tunnel docker](/cloudflare/tunnel_docker.png)
 
 
 Now, here you will be having the optin to starting adding your subdomains and redirect them to your internal network IP address and port.
@@ -118,11 +118,11 @@ In **Cloudflare** home dashboard, under the **API** section, click on "***Get yo
 
 Click on "**Create Token**", and from the very end, choose "***Custom token***" and do as in below
 
-![api token](/screenshots/cloudflare/api_token.png)
+![api token](/cloudflare/api_token.png)
 
 You shall get something similar to the below. Take note of that token and save somewhere as it will ***NEVER*** be shown again
 
-![token](/screenshots/cloudflare/token.png)
+![token](/cloudflare/token.png)
 
 
 ## Updating Your Public IP
