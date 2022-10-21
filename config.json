@@ -1,0 +1,14 @@
+{
+  "settings": [
+    {
+      "provider": "cloudflare",
+      "zone_identifier": "ZONE_ID",
+      "domain": "MYDOMAIN.GK",
+      "host": "@",
+      "ttl": 600,
+      "proxied": true,
+      "token": "API_TOKEN",
+      "ip_version": "ipv4"
+    }
+  ]
+}

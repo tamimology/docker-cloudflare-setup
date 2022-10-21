@@ -1,0 +1,57 @@
+#
+####################################################
+#                                                  #
+#              -------CloudFlare-------            #
+#                                                  #
+####################################################
+#
+  cloudflare:
+    container_name: cloudflare
+    restart: always
+    user: root
+    environment:
+      - NO_AUTOUPDATE="true"
+      - TUNNEL_TOKEN=$TUNNEL_TOKEN
+    networks:
+      bridge:
+         ipv4_address: 172.19.0.201
+    command: 'tunnel --config /etc/tunnel/config.yml run'
+    image: 'cloudflare/cloudflared:latest'
+#
+####################################################
+#                                                  #
+#             -------DDNS-Updater-------           #
+#                                                  #
+####################################################
+#
+  ddns-updater:
+    container_name: ddns-updater
+    restart: always
+    environment:
+      - TZ=$TZ
+      - PUID=$PUID
+      - PGID=$PGID
+      - PERIOD=5m
+      - UPDATE_COOLDOWN_PERIOD=5m
+      - PUBLICIP_FETCHERS=all
+      - PUBLICIP_HTTP_PROVIDERS=all
+      - PUBLICIPV4_HTTP_PROVIDERS=all
+      - PUBLICIPV6_HTTP_PROVIDERS=all
+      - PUBLICIP_DNS_PROVIDERS=all
+      - PUBLICIP_DNS_TIMEOUT=3s
+      - HTTP_TIMEOUT=10s
+      - LISTENING_PORT=8000
+      - ROOT_URL=/
+      - BACKUP_PERIOD=24h # 0 to disable
+      - BACKUP_DIRECTORY=/updater/data
+      - LOG_LEVEL=info
+      - LOG_CALLER=hidden
+      - SHOUTRRR_ADDRESSES=pushover://shoutrrr:$PUSHOVER_API@$PUSHOVER_USER_KEY
+    volumes:
+      - $PERSIST/ddns-updater:/updater/data
+    networks:
+      bridge:
+    ports:
+      - 8002:8000/tcp
+    image: 'qmcgaw/ddns-updater:latest'
+#
