@@ -22,9 +22,9 @@
 
 #### The first step in the whole setup, is to have a Cloudflare account
 
-Simply, open the official website from [here](https://dash.cloudflare.com/sign-up) to sign up. Just use you preferred email and password.
+Simply, open the official website from [here](https://dash.cloudflare.com/sign-up) to sign up. Just use your preferred email and password.
 
-After that, the main dashboard will open, allowing you to add a new site, which you have already signed up for (check [here](/README.md#creating-a-dns) to check how to get a free DNS service.
+After that, the main dashboard will open, allowing you to add a new site, which you have already signed up for (check [here](/README.md#creating-a-dns) to see how to get a free DNS service).
 
 #### **NOTE:** *Never use the DuckDNS service with Cloudflare as it is not supported*
 
@@ -61,13 +61,13 @@ In this guide, I will go with the free DNS service from [Freenom](https://www.fr
 
 Once you enter to the website, you need to check the availability of the desired URL, until you find a free one, or decide to buy a cheap one. In the guide, I will be referring to "***mydomain.gk***" for illustration purposes only
 
-Ath the time I prepared this guide, there was a bug on their server in which you cannot just click on any of the options available, so to register, simply click on **Services** then choose **Register a New Domain**. Follow the steps in there, and make sure you choose the **12 months** plan as it is the longest period offered as free.
+At the time I prepared this guide, there was a bug on their server in which you cannot just click on any of the options available, so to register, simply click on **Services** then choose **Register a New Domain**. Follow the steps in there, and make sure you choose the **12 months** plan as it is the longest period offered for free.
 
 ![free dns](/cloudflare/free_dns.png)
 
 ## Changing Nameservers
 
-#### This is step is where you link your DNS address with the Cloudflare Tunnel
+#### This is where you link your DNS address with the Cloudflare Tunnel
 
 Now after you signed up, go to **Services** then choose **My Domains** from the drop down list, then next to your registered domain, click on **Manage Domain**.
 
@@ -91,11 +91,11 @@ Click on **Next**
 ![tunnel docker](/cloudflare/tunnel_docker.png)
 
 
-Now, here you will be having the optin to starting adding your subdomains and redirect them to your internal network IP address and port.
+Now, here you will be having the option to start adding your subdomains and redirect them to your internal network IP address and port.
 
 Add all your subdomains before leaving this page. **DON'T CREATE SEPERATE TUNNELS FOR EACH SUBDOMAIN, ALL CAN GO IN ONE TUNNEL**
 
-###### To test your subdomain, simply click on it after it is being created and it should redirect you correctly. If not, make sure you followed this guide from the beginning and entered your host IP and port correctly, as I guarantee you 100% it works if you follow me as mentioned.
+###### To test your subdomain, simply click on it after it has been created and it should redirect you correctly. If not, make sure you followed this guide from the beginning and entered your host IP and port correctly, as I guarantee you 100% it works if you follow me as mentioned.
 
 
 
@@ -120,7 +120,7 @@ Click on "**Create Token**", and from the very end, choose "***Custom token***" 
 
 ![api token](/cloudflare/api_token.png)
 
-You shall get something similar to the below. Take note of that token and save somewhere as it will ***NEVER*** be shown again
+You shall get something similar to the below. Take note of that token and save it somewhere as it will ***NEVER*** be shown again
 
 ![token](/cloudflare/token.png)
 
@@ -130,8 +130,8 @@ You shall get something similar to the below. Take note of that token and save s
 #### If you recall, in Cloudflare dashboard, your public IP was entered in the first step where you added a record under your DNS management part. This might change in various conditions, and need to be up-to-date after the change so you can access your domain remotly
 
 The two main reasons for the public IP to be changed are:
-  - Restart of the main router connected to the ISP cable
-  - Your ISP decides to change it as you did not pay extra to have a static public IP
+  - A restart of the main router connected to the ISP cable
+  - Your ISP decides to continuously change it as you did not pay extra to have a static public IP
 
 Well, in either case, you need to have that IP updated. Rather than everytime checking your new public IP, then going to the Cloudflare's dashboard and updating it manually, there is an automatic way to do that.
 
@@ -167,14 +167,9 @@ Make sure to update the following to match yours:
 
 Save the file. Now, for some reason, you need to change the permissions of the created folder and its contents so the container will be able to have write access once created.
 
-Considering that:
-  - ***UID***=1000
-  - ***GID***=100
-  - ***$PERSIST***=/docker/ddns-updater
+Considering that "***UID***=1000" and "***GID***=100", SSH into your host machine in which you will create the contianer and exceute the following commands
 
-To do so, SSH into your host machine in which you will create the contianer and exceute the following commands
-
-`chown -R UID:GID ddns-updater`
+`chown -R UID:GID /docker/ddns-updater`
 
 
 ## The Consolidated docker-compose
@@ -185,11 +180,11 @@ You can simply download the sample file from [here](/docker-compose.yml), or man
 
 Make sure you upodate the following to match your setup:
   - **$TUNNEL_TOKEN** that you have taken note from the docker command after you created your tunnel above
-  - **$PERSIST** to match your docker folder, i.e. "*/docker/ddns-updater*"
+  - **$PERSIST** to match your docker folder, i.e. "*/some_folder/docker*"
   - **$TZ** to be your local time zone, check [here](http://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for details
   - **PUID** to match you docker user id, i.e. "*1000*"
   - **PGID** to match you docker group id, i.e. "*100*"
-  - **$PUSHOVER_API** and **@$PUSHOVER_USER_KEY**, or the whole *SHOUTRRR_ADDRESSES* if you use something else
+  - **$PUSHOVER_API** and **@$PUSHOVER_USER_KEY**, or change the whole *SHOUTRRR_ADDRESSES* if you use something else
 
 ```yaml
 #
@@ -250,3 +245,19 @@ Make sure you upodate the following to match your setup:
     image: 'qmcgaw/ddns-updater:latest'
 #
 ```
+Now if you try to access your local ip address with port 8002, you should get something like this
+
+![ddns](/cloudflare/ddns.png)
+
+
+
+
+***NOTE:*** *if you want to have access to Cloudflare via **Authelia**, you can refer my guide from [here](https://github.com/tamimology/cloudflare-authelia)*
+
+
+
+
+
+
+## License
+This document guide is licensed under the CC0 1.0 Universal license. The terms of the license are detailed in [LICENSE](/LICENSE)
