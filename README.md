@@ -195,7 +195,7 @@ Make sure you upodate the following to match your setup:
 ####################################################
 #
   cloudflared:
-    container_name: cloudflare
+    container_name: cloudflared
     restart: always
     hostname: cloudflared
     user: root
