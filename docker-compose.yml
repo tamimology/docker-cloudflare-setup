@@ -5,17 +5,15 @@
 #                                                  #
 ####################################################
 #
-  cloudflare:
+  cloudflared:
     container_name: cloudflare
     restart: always
+    hostname: cloudflared
     user: root
     environment:
-      - NO_AUTOUPDATE="true"
+      - NO_AUTOUPDATE=true
       - TUNNEL_TOKEN=$TUNNEL_TOKEN
-    networks:
-      bridge:
-         ipv4_address: 172.19.0.201
-    command: 'tunnel --config /etc/tunnel/config.yml run'
+    command: 'tunnel --no-autoupdate run' # 'tunnel --config /etc/tunnel/config.yml run' 
     image: 'cloudflare/cloudflared:latest'
 #
 ####################################################
@@ -27,6 +25,7 @@
   ddns-updater:
     container_name: ddns-updater
     restart: always
+    hostname: ddns-updater
     environment:
       - TZ=$TZ
       - PUID=$PUID
@@ -41,6 +40,7 @@
       - PUBLICIP_DNS_TIMEOUT=3s
       - HTTP_TIMEOUT=10s
       - LISTENING_PORT=8000
+      - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
       - ROOT_URL=/
       - BACKUP_PERIOD=24h # 0 to disable
       - BACKUP_DIRECTORY=/updater/data
@@ -49,9 +49,8 @@
       - SHOUTRRR_ADDRESSES=pushover://shoutrrr:$PUSHOVER_API@$PUSHOVER_USER_KEY
     volumes:
       - $PERSIST/ddns-updater:/updater/data
-    networks:
-      bridge:
     ports:
       - 8002:8000/tcp
+    user: $PUID:$PGID
     image: 'qmcgaw/ddns-updater:latest'
 #
