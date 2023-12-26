@@ -1,10 +1,10 @@
 # The A-Z Cloudflare Tunnel Setup in Docker container Guide
 
 #### **NOTE:** *WHEN WRITING THIS GUIDE, IT WAS BASED ON*
-- [DOCKER-COMPOSE v2.11.2](https://github.com/docker/compose)
-- [CLOUDFLARE TUNNEL v2022.10.2](https://github.com/cloudflare/cloudflared)
-- [AUTHELIA v4.36.9](https://github.com/authelia/authelia)
-- [DDNS UPDATER v2.4.1](https://github.com/qdm12/ddns-updater)
+- [DOCKER-COMPOSE v2.15.1](https://github.com/docker/compose)
+- [CLOUDFLARE TUNNEL v2023.10.0](https://github.com/cloudflare/cloudflared)
+- [AUTHELIA v4.37.5](https://github.com/authelia/authelia)
+- [DDNS UPDATER v2.5.0](https://github.com/qdm12/ddns-updater)
 
 # Table of Contents
 
@@ -80,7 +80,7 @@ In the next window, click on **Management Tools** then choose **Nameservers** an
 
 #### In Cloudflare, a Tunnel is similar to a route of the main domain, or simply, think of it as the subdomains.
 
-To create new Tunnel, go to the [**Cloudflare Zero Trust**](https://dash.teams.cloudflare.com/) dashboard, and under **Access**, click on **Tunnels**
+To create new Tunnel, go to the [**Cloudflare Zero Trust**](https://one.dash.cloudflare.com/) dashboard, and under **Access**, click on **Tunnels**
 
 Click on **Create a tunnel**, enter a name for that tunnel, i.e. "***My Domain***"
 
@@ -194,17 +194,15 @@ Make sure you upodate the following to match your setup:
 #                                                  #
 ####################################################
 #
-  cloudflare:
+  cloudflared:
     container_name: cloudflare
     restart: always
+    hostname: cloudflared
     user: root
     environment:
-      - NO_AUTOUPDATE="true"
+      - NO_AUTOUPDATE=true
       - TUNNEL_TOKEN=$TUNNEL_TOKEN
-    networks:
-      bridge:
-         ipv4_address: 172.19.0.201
-    command: 'tunnel --config /etc/tunnel/config.yml run'
+    command: 'tunnel --no-autoupdate run' # 'tunnel --config /etc/tunnel/config.yml run' 
     image: 'cloudflare/cloudflared:latest'
 #
 ####################################################
@@ -216,6 +214,7 @@ Make sure you upodate the following to match your setup:
   ddns-updater:
     container_name: ddns-updater
     restart: always
+    hostname: ddns-updater
     environment:
       - TZ=$TZ
       - PUID=$PUID
@@ -230,6 +229,7 @@ Make sure you upodate the following to match your setup:
       - PUBLICIP_DNS_TIMEOUT=3s
       - HTTP_TIMEOUT=10s
       - LISTENING_PORT=8000
+      - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
       - ROOT_URL=/
       - BACKUP_PERIOD=24h # 0 to disable
       - BACKUP_DIRECTORY=/updater/data
@@ -238,10 +238,9 @@ Make sure you upodate the following to match your setup:
       - SHOUTRRR_ADDRESSES=pushover://shoutrrr:$PUSHOVER_API@$PUSHOVER_USER_KEY
     volumes:
       - $PERSIST/ddns-updater:/updater/data
-    networks:
-      bridge:
     ports:
       - 8002:8000/tcp
+    user: $PUID:$PGID
     image: 'qmcgaw/ddns-updater:latest'
 #
 ```
