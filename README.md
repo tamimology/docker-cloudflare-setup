@@ -2,8 +2,7 @@
 
 #### **NOTE:** *WHEN WRITING THIS GUIDE, IT WAS BASED ON*
 - [DOCKER-COMPOSE v2.15.1](https://github.com/docker/compose)
-- [CLOUDFLARE TUNNEL v2023.10.0](https://github.com/cloudflare/cloudflared)
-- [AUTHELIA v4.37.5](https://github.com/authelia/authelia)
+- [CLOUDFLARE TUNNEL v2026.3.0](https://github.com/cloudflare/cloudflared)
 - [DDNS UPDATER v2.5.0](https://github.com/qdm12/ddns-updater)
 
 # Table of Contents
@@ -30,13 +29,13 @@ After that, the main dashboard will open, allowing you to add a new site, which 
 
 ![add site](/cloudflare/add_site.png)
 
-After that, it should open your website dashboard by default, if not, simply click on it under the Home view.
+After that, it should open your website dashboard by default.
 
-At the very bottom right side, where it says ***API***, take note of the **Zone ID** and save it somewhere for later usage.
-
-Now on the right side, click **DNS Settings**.
+At the very left side, click on ***Domains***. Then next to your domain, click on  three dots  on the right side and choose **Copy zone ID** and save it somewhere for later usage.
 
 ![dns settings](/cloudflare/dns_settings.png)
+
+Now repeat the same steps but this time click on **Configure DNS**.
 
 In there, click on **Add record** and fill in as following:
   1. **A**
@@ -80,11 +79,11 @@ In the next window, click on **Management Tools** then choose **Nameservers** an
 
 #### In Cloudflare, a Tunnel is similar to a route of the main domain, or simply, think of it as the subdomains.
 
-To create new Tunnel, go to the [**Cloudflare Zero Trust**](https://one.dash.cloudflare.com/) dashboard, and under **Access**, click on **Tunnels**
+To create new Tunnel, go to the [**Cloudflare Zero Trust**](https://one.dash.cloudflare.com/) dashboard, and under **Networks**, click on **Connectors**
 
-Click on **Create a tunnel**, enter a name for that tunnel, i.e. "***My Domain***"
+Click on **Create a tunnel**, then choose _Select Cloudflared_, enter a name for that tunnel, i.e. "***My Domain***" and follow the steps.
 
-Now the Tunnel is created, and a new page opens showing the **Install connector** environment options available for that created tunnel. Click on "**Docker**" add take note of what is in there for later use.
+Now the Tunnel is created, and a new page opens showing the **Install and run connectors** environment options available for that created tunnel. Click on "**Docker**" add take note of what is in there for later use.
 
 Click on **Next**
 
@@ -114,11 +113,13 @@ You just need to take the highlighted string at the very end after ***`--token `
 
 #### This API token will be needed to have the public IP auto updated in the container that you will create next.
 
-In **Cloudflare** home dashboard, under the **API** section, click on "***Get you API token***", or simply click [here](https://dash.cloudflare.com/profile/api-tokens)
+In **Cloudflare** home dashboard, on the top left corner, where there is a small icon of a man, which in fact you, click on it, and choose ***Porfile***, then **API Tokens** from the left section, or simply click [here](https://dash.cloudflare.com/profile/api-tokens)
 
-Click on "**Create Token**", and from the very end, choose "***Custom token***" and do as in below
+![add api token](/cloudflare/api_token.png)
 
-![api token](/cloudflare/api_token.png)
+Click on "**Create Token**", and choose the first option, "***Custom token***" and do as in below
+
+![api token](/cloudflare/add_api_token.png)
 
 You shall get something similar to the below. Take note of that token and save it somewhere as it will ***NEVER*** be shown again
 
@@ -202,7 +203,7 @@ Make sure you upodate the following to match your setup:
     environment:
       - NO_AUTOUPDATE=true
       - TUNNEL_TOKEN=$TUNNEL_TOKEN
-    command: 'tunnel --no-autoupdate run' # 'tunnel --config /etc/tunnel/config.yml run' 
+    command: 'tunnel --no-autoupdate run'
     image: 'cloudflare/cloudflared:latest'
 #
 ####################################################
